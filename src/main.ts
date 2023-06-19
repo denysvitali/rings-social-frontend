@@ -7,7 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowUp, faMagnifyingGlass, faArrowDown, faComment, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 
-import type { Settings } from './models/settings.ts';
+import type { Settings } from './models/settings';
 
 import App from './App.vue'
 import router from './router'
@@ -15,7 +15,7 @@ import router from './router'
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
-library.add(faMagnifyingGlass)
+library.add(faMagnifyingGlass);
 library.add(faArrowUp);
 library.add(faArrowDown);
 library.add(faComment);

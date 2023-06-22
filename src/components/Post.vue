@@ -45,10 +45,13 @@ let c = computed(() => {
                 <div class="post-body">The protest is still in progress though. Subreddits that have been forced online are having votes on changing their focus. Many subs have already voted and changed their focus accordingly.</div>
             </div>
             <div class="post-actions">
-               <div class="action action-comment">
+                <RouterLink 
+                    :to="`/r/${post.ring_name}/${post.id}`" 
+                    class="action action-comment"
+                >
                     <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
                     <span class="post-comment-count">{{ post.commentsCount }}</span>
-               </div>
+                </RouterLink>
             </div>
             <div class="post-metadata">
                 <RouterLink 
@@ -138,7 +141,7 @@ let c = computed(() => {
 
             margin-top: 8px;
 
-            div.action {
+            .action {
                 cursor: pointer;
                 padding: 4px;
                 border-radius: 5px;

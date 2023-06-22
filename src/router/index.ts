@@ -13,6 +13,11 @@ const router = createRouter({
       path: '/r/:ringName',
       name: 'view-ring',
       component: () => import('../views/RingView.vue')
+    },
+    {
+      path: '/r/:ringName/:postId',
+      name: 'view-post',
+      component: () => import('../views/PostView.vue')
     }
   ]
 })

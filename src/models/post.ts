@@ -12,4 +12,6 @@ export type Post = {
     ups: number,
     downs: number,
     nsfw: boolean,
+
+    body: string?,
 };

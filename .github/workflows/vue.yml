@@ -20,7 +20,7 @@ jobs:
     - run: yarn install
     - run: yarn run build
     - run: cp dist/index.html dist/404.html # GH Pages fix
-    - run: cp public/settings.prod.json public/settings.json
+    - run: cp dist/settings.prod.json dist/settings.json
     - uses: actions/upload-pages-artifact@v1.0.5
       with:
         path: dist/

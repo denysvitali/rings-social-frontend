@@ -46,6 +46,9 @@
   --color-action-comment-border: #0871eb;
 
   --color-action-text-hover: #FFF;
+
+  --color-user: #0e9e62;
+  --color-dimmed: #8c8c8c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -59,6 +62,7 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+    --color-dimmed: #575757;
   }
 }
 

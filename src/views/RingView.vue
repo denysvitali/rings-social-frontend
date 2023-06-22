@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
-import type { Post } from '@/models/post';
-import PostVue from '@/components/Post.vue';
+import type { SimplePost } from '@/models/models';
+import SimplePostVue from '@/components/SimplePost.vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter, type RouteLocationNormalized } from 'vue-router';
 
 let loaded: Ref<boolean> = ref(false);
-let posts: Ref<Array<Post>> = ref([]);
+let posts: Ref<Array<SimplePost>> = ref([]);
 let ringName: Ref<string> = ref('');
 let multiRing: Ref<boolean> = ref(false);
 
@@ -35,7 +35,7 @@ function loadPosts(to: RouteLocationNormalized){
 
     fetch(window._settings.baseUrl + '/r/' + ringName.value + '/posts')
         .then((response: { json: () => any; }) => response.json())
-        .then((data: Post[]) => posts.value = data)
+        .then((data: SimplePost[]) => posts.value = data)
         .then(() => loaded.value = true);
 }
 
@@ -45,9 +45,9 @@ loadPosts(useRouter().currentRoute.value);
 <template>
     <div class="ring">
         <div class="ring-content" v-if="loaded">
-            <h2>r/{{ ringName }}</h2>
+            <h2>/r/{{ ringName }}</h2>
             <div class="posts">
-                <PostVue v-for="post in posts" :key="post.id" :post="post" :multiring="multiRing" />
+                <SimplePostVue v-for="post in posts" :key="post.id" :post="post" :multiring="multiRing" />
             </div>
         </div>
         <div v-else>
@@ -61,15 +61,7 @@ loadPosts(useRouter().currentRoute.value);
 
 <style scoped lang="scss">
 .ring {
-    padding: 10px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    max-width: 1200px;
+    
 
     /* Posts is a collection of reddit-like entries */
     .posts {

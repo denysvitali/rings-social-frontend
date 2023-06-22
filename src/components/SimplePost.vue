@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, type PropType, type Ref, computed } from 'vue';
-import type { Post } from '@/models/post';
+import type { SimplePost } from '@/models/models';
 import { DateTime } from 'luxon';
-import { faF } from '@fortawesome/free-solid-svg-icons';
 import type { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 let props = defineProps({
     post: {
-        type: Object as PropType<Post>,
+        type: Object as PropType<SimplePost>,
         required: true
     },
     multiring: {
@@ -18,8 +17,8 @@ let props = defineProps({
 
 let c = computed(() => {
     return {
-        postedOn: DateTime.fromISO(props.post.posted_on).toRelative(),
-        postedOnYmd: DateTime.fromISO(props.post.posted_on).toLocaleString(DateTime.DATETIME_MED)
+        postedOn: DateTime.fromISO(props.post.createdAt).toRelative(),
+        postedOnYmd: DateTime.fromISO(props.post.createdAt).toLocaleString(DateTime.DATETIME_MED)
     }
 });
 
@@ -34,36 +33,47 @@ let c = computed(() => {
                 <font-awesome-icon :icon="['fas', 'arrow-down']" class="vote-down "/>
             </div>
         </div>
+
         <div class="post-right">
-            <div v-if="post.link != null">
+            <div v-if="post.link != null" class="post-title-container">
                 <a :href="post.link" class="post-link" target="_blank">
                     <span class="post-title">{{ post.title }}</span>
                 </a>
             </div>
-            <div v-else>
+            <div v-else class="post-title-container">
+                <RouterLink 
+                    :to="`/r/${post.ringName}/${post.id}`" 
+                    class="post-title"
+                >
                 <div class="post-title">{{ post.title }}</div>
-                <div class="post-body">{{ post.body }}</div>
+                </RouterLink>
             </div>
+            <div class="post-metadata">
+                <span class="post-domain" v-if="post.domain">{{ post.domain }}</span>
+                <span class="post-divider" v-if="post.domain">•</span>
+                <span class="post-author">/u/{{ post.authorUsername }}</span>
+                <span class="post-divider">•</span>
+                <span class="post-date" :alt="c.postedOnYmd">{{ c.postedOn }}</span>
+                <span class="nsfw-tag" v-if="post.nsfw">NSFW</span>
+            </div>
+
+            <div class="post-body" v-if="post.body != null">
+                {{ post.body }}
+            </div>
+
             <div class="post-actions">
                 <RouterLink 
-                    :to="`/r/${post.ring_name}/${post.id}`" 
+                    :to="`/r/${post.ringName}/${post.id}`" 
                     class="action action-comment"
                 >
                     <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
                     <span class="post-comment-count">{{ post.commentsCount }}</span>
                 </RouterLink>
             </div>
-            <div class="post-metadata">
-                <RouterLink 
-                    :to='"/r/" + post.ring_name' 
-                    class="ring-name" 
-                    v-if="multiring" 
-                    :style="{ backgroundColor: post.ring_color }"
-                >r/{{ post.ring_name }}</RouterLink>
-                <span class="post-author">{{ post.author_username }}</span>
-                <span class="post-date" :alt="c.postedOnYmd">{{ c.postedOn }}</span>
-                <span class="nsfw-tag" v-if="post.nsfw">NSFW</span>
-            </div>
+        </div>
+
+        <div class="post-image">
+            <img :src="`https://picsum.photos/seed/${post.id}/200/300`" alt="Post Image">
         </div>
     </div>
 </template>
@@ -72,9 +82,27 @@ let c = computed(() => {
 .post {
     display: flex;
     flex-direction: row;
-    justify-content: left;
-    align-items: center;
     width: 100%;
+    column-gap: 20px;
+    padding-bottom: 10px;
+    
+
+    .post-image {
+        display: flex;
+        width: 100px;
+        max-height: 100px;
+        border-radius: 5px;
+        overflow: hidden;
+        img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .post-right {
+        flex: 1;
+    }
 
     .post-left {
         display: flex;
@@ -88,7 +116,6 @@ let c = computed(() => {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             gap: 10px;
 
             .vote-up, .vote-down {
@@ -103,7 +130,15 @@ let c = computed(() => {
             .vote-down:hover {
                 color: #f00;
             }
+
+            .post-score {
+                user-select: none;
+            }
         }
+    }
+
+    .post-body {
+        margin-top: 10px;
     }
 
     a {
@@ -115,22 +150,17 @@ let c = computed(() => {
         }
     }
 
-    .post-link {
-        color: var(--color-post-link);
-        &:visited {
-            color: var(--color-post-link-visited);
-        }
-    }
 
     .post-right {
         display: flex;
         flex-direction: column;
         width: 100%;
 
-        .post-title {
+        .post-title-container {
             font-size: 20px;
+            line-height: 20px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .post-actions {
@@ -138,8 +168,7 @@ let c = computed(() => {
             flex-direction: row;
             align-items: center;
             column-gap: 10px;
-
-            margin-top: 8px;
+            margin-top: 16px;
 
             .action {
                 cursor: pointer;
@@ -176,7 +205,7 @@ let c = computed(() => {
     }
 
     .post-metadata {
-        margin-top: 10px;
+        margin-top: 4px;
         display: flex;
         flex-direction: row;
         align-items: center;

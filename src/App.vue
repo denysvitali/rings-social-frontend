@@ -94,5 +94,15 @@ header {
 
 div.view {
   margin-top: 20px;
+
+  padding: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  max-width: 1200px;
 }
 </style>

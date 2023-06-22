@@ -13,5 +13,5 @@ export type Post = {
     downs: number,
     nsfw: boolean,
 
-    body: string?,
+    body?: string,
 };

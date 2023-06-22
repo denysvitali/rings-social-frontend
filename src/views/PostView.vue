@@ -38,12 +38,11 @@ async function loadPost(to: RouteLocationNormalized){
 
 loadPost(useRouter().currentRoute.value);
 
-/*
-    Computed post.createdAt parsed with luxon
-*/
-let computedDate = computed(() => {
-    if (post.value == null) return '';
-    return DateTime.fromISO(post.value.createdAt).toLocaleString(DateTime.DATETIME_MED);
+let c = computed(() => {
+    return {
+        postedOn: post.value ? DateTime.fromISO(post.value.createdAt).toRelative(): '',
+        postedOnYmd: post.value ? DateTime.fromISO(post.value.createdAt).toLocaleString(DateTime.DATETIME_MED): ''
+    }
 });
 </script>
   
@@ -54,7 +53,8 @@ let computedDate = computed(() => {
         <!-- A nice post metadata area -->
         <div class="post-metadata">
             <div class="post-author">/u/{{ post.author.username }}</div>
-            <div class="post-date">{{ computedDate }}</div>
+            <div class="post-divider">•</div>
+            <div class="post-date">{{ c.postedOn }}</div>
         </div>
         <!-- The post body -->
         <div class="post-body">{{ post.body }}</div>
@@ -73,10 +73,11 @@ let computedDate = computed(() => {
     flex-direction: row;
     align-items: center;
     margin-bottom: 1rem;
+    column-gap: 8px;
+
     .post-author {
         color: var(--color-user);
         font-weight: bold;
-        margin-right: 0.5rem;
     }
     .post-date {
         color: #999;

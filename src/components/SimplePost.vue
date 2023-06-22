@@ -49,11 +49,17 @@ let c = computed(() => {
                 </RouterLink>
             </div>
             <div class="post-metadata">
-                <span class="post-domain" v-if="post.domain">{{ post.domain }}</span>
-                <span class="post-divider" v-if="post.domain">•</span>
-                <span class="post-author">/u/{{ post.authorUsername }}</span>
-                <span class="post-divider">•</span>
-                <span class="post-date" :alt="c.postedOnYmd">{{ c.postedOn }}</span>
+                <div class="domain element-divider" v-if="post.domain">
+                    <span class="post-domain">{{ post.domain }}</span>
+                    <span class="post-divider">•</span>
+                </div>
+                <div class="author element-divider">
+                    <span class="post-author">/u/{{ post.authorUsername }}</span>
+                    <span class="post-divider">•</span>
+                </div>
+                <div class="date element-divider">
+                    <span class="post-date" :alt="c.postedOnYmd">{{ c.postedOn }}</span>
+                </div>
                 <span class="nsfw-tag" v-if="post.nsfw">NSFW</span>
             </div>
 
@@ -213,6 +219,11 @@ let c = computed(() => {
 
         font-size: 0.8em;
 
+        .element-divider {
+            display: flex;
+            column-gap: 10px;
+        }
+
         .post-author {
             font-weight: bold;
         }
@@ -236,6 +247,34 @@ let c = computed(() => {
             border-radius: 4px;
             padding: 0px 4px;
             font-weight: bold;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .post {
+        .post-image {
+            display: none;
+            width: 50px;
+            max-height: 50px;
+        }
+
+        .post-left {
+            margin-right: 8px;
+        }
+        
+        .post-right {
+            .post-metadata {
+                div.date {
+                    display: none;
+                }
+
+                div.author {
+                    .post-divider {
+                        display: none;
+                    }
+                }
+            }
         }
     }
 }

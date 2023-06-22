@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Comment } from '@/models/models';
-import type { PropType } from 'vue';
+import { type PropType } from 'vue';
 import { DateTime } from 'luxon';
 
 const props = defineProps({
@@ -30,7 +30,7 @@ const props = defineProps({
                     <div class="comment-metadata">
                         <div class="comment-author">/u/{{ comment.author.username }}</div>
                         <div class="comment-divider">•</div>
-                        <div class="comment-date">{{ DateTime.fromISO(comment.createdAt).toLocaleString(DateTime.DATETIME_MED) }}</div>
+                        <div class="comment-date">{{ DateTime.fromISO(comment.createdAt).toRelative() }}</div>
                     </div>
                     <div class="comment-body">{{ comment.body }}</div>
                 </div>

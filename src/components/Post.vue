@@ -42,7 +42,7 @@ let c = computed(() => {
             </div>
             <div v-else>
                 <div class="post-title">{{ post.title }}</div>
-                <div class="post-body">The protest is still in progress though. Subreddits that have been forced online are having votes on changing their focus. Many subs have already voted and changed their focus accordingly.</div>
+                <div class="post-body">{{ post.body }}</div>
             </div>
             <div class="post-actions">
                 <RouterLink 

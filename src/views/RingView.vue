@@ -45,7 +45,9 @@ loadPosts(useRouter().currentRoute.value);
 <template>
     <div class="ring">
         <div class="ring-content" v-if="loaded">
-            <h2>/r/{{ ringName }}</h2>
+            <h2>
+                {{ ringName }}
+            </h2>
             <div class="posts">
                 <SimplePostVue v-for="post in posts" :key="post.id" :post="post" :multiring="multiRing" />
             </div>
@@ -69,8 +71,9 @@ loadPosts(useRouter().currentRoute.value);
         flex-direction: column;
         align-items: center;
         width: 100%;
-        padding: 20px;
-        row-gap: 40px;
+        row-gap: 16px;
+        margin-top: 20px;
+
 
         /* Post is a single entry */
     }

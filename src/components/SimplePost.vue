@@ -3,22 +3,35 @@ import { ref, type PropType, type Ref, computed } from 'vue';
 import type { SimplePost } from '@/models/models';
 import { DateTime } from 'luxon';
 import type { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VoteContainer from './VoteContainer.vue';
 
 let props = defineProps({
     post: {
         type: Object as PropType<SimplePost>,
         required: true
     },
-    multiring: {
+    singlePostView: {
         type: Boolean as PropType<boolean>,
-        default: false
+        default: false,
     }
 });
+
+/* computeRingTextColor returns the text color that best fits the ring color. */
+function computeRingTextColor(ringColor: string): string {
+    let r = parseInt(ringColor.substring(1, 3), 16);
+    let g = parseInt(ringColor.substring(3, 5), 16);
+    let b = parseInt(ringColor.substring(5, 7), 16);
+
+    let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+    return (yiq >= 128) ? '#000' : '#fff';
+}
 
 let c = computed(() => {
     return {
         postedOn: DateTime.fromISO(props.post.createdAt).toRelative(),
-        postedOnYmd: DateTime.fromISO(props.post.createdAt).toLocaleString(DateTime.DATETIME_MED)
+        postedOnYmd: DateTime.fromISO(props.post.createdAt).toLocaleString(DateTime.DATETIME_MED),
+        ringTextColor: computeRingTextColor(props.post.ringColor),
     }
 });
 
@@ -27,11 +40,8 @@ let c = computed(() => {
 <template>
     <div class="post">
         <div class="post-left">
-            <div class="upvote-downvote-area">
-                <font-awesome-icon :icon="['fas', 'arrow-up']" class="vote-up" />
-                <span class="post-score">{{ post.score }}</span>
-                <font-awesome-icon :icon="['fas', 'arrow-down']" class="vote-down "/>
-            </div>
+            <!-- Upvote / Downvote area, in a stylish way -->
+            <VoteContainer :score="post.score"/>
         </div>
 
         <div class="post-right">
@@ -53,6 +63,13 @@ let c = computed(() => {
                     <span class="post-domain">{{ post.domain }}</span>
                     <span class="post-divider">•</span>
                 </div>
+                <div class="ring element-divider" v-if="props.singlePostView">
+                    <span class="post-ring" :style="{
+                        backgroundColor: post.ringColor,
+                        color: c.ringTextColor,
+                    }">/r/{{ post.ringName }}</span>
+                    <span class="post-divider">•</span>
+                </div>
                 <div class="author element-divider">
                     <span class="post-author">/u/{{ post.authorUsername }}</span>
                     <span class="post-divider">•</span>
@@ -67,13 +84,15 @@ let c = computed(() => {
                 {{ post.body }}
             </div>
 
-            <div class="post-actions">
+            <div class="post-footer-divider" v-if="!singlePostView"></div>
+
+            <div class="post-actions" v-if="!singlePostView">
                 <RouterLink 
                     :to="`/r/${post.ringName}/${post.id}`" 
                     class="action action-comment"
                 >
-                    <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
-                    <span class="post-comment-count">{{ post.commentsCount }}</span>
+                    <font-awesome-icon class="icon" :icon="['fas', 'message']" />
+                    <span class="action-text">{{ post.commentsCount }}</span>
                 </RouterLink>
             </div>
         </div>
@@ -89,13 +108,17 @@ let c = computed(() => {
     display: flex;
     flex-direction: row;
     width: 100%;
-    column-gap: 20px;
-    padding-bottom: 10px;
+    column-gap: var(--generic-column-gap);
     
+    background-color: var(--color-post-background);
+    padding: var(--generic-padding);
+    border-radius: var(--generic-border-radius);
+    overflow: hidden;
+
 
     .post-image {
         display: flex;
-        width: 100px;
+        width: 150px;
         max-height: 100px;
         border-radius: 5px;
         overflow: hidden;
@@ -116,31 +139,13 @@ let c = computed(() => {
         align-items: center;
         justify-content: center;
         width: 50px;
-        margin-right: 20px;
+    }
 
-        .upvote-downvote-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+    .post-footer-divider {
+        height: 1px;
 
-            .vote-up, .vote-down {
-                cursor: pointer;
-                transition: color 0.2s ease-in-out;
-            }
-
-            .vote-up:hover {
-                color: #0f0;
-            }
-
-            .vote-down:hover {
-                color: #f00;
-            }
-
-            .post-score {
-                user-select: none;
-            }
-        }
+        background-color: var(--color-post-divider);
+        margin: 1em 0px;
     }
 
     .post-body {
@@ -174,13 +179,12 @@ let c = computed(() => {
             flex-direction: row;
             align-items: center;
             column-gap: 10px;
-            margin-top: 16px;
 
             .action {
                 cursor: pointer;
-                padding: 4px;
+                padding: 4px 8px;
                 border-radius: 5px;
-                font-size: 0.8em;
+                font-size: 1em;
                 user-select: none;
             }
 
@@ -188,11 +192,10 @@ let c = computed(() => {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                column-gap: 5px;
+                column-gap: 8px;
 
                 color: var(--color-action-comment);
-                border: 1px solid var(--color-action-comment-border);
-
+ 
                 &:hover {
                     background-color: var(--color-action-comment);
                     color: var(--color-action-text-hover);
@@ -225,6 +228,15 @@ let c = computed(() => {
         }
 
         .post-author {
+            color: var(--color-user);
+            font-weight: bold;
+        }
+
+        .post-ring {
+            color: #fff;
+            user-select: none;
+            border-radius: 6px;
+            padding: 0px 6px;
             font-weight: bold;
         }
 

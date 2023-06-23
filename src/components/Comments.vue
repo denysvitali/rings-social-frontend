@@ -2,6 +2,7 @@
 import type { Comment } from '@/models/models';
 import { type PropType } from 'vue';
 import { DateTime } from 'luxon';
+import VoteContainer from './VoteContainer.vue';
 
 const props = defineProps({
     comments: {
@@ -20,11 +21,8 @@ const props = defineProps({
         <div v-for="comment in comments" :key="comment.id" class="comment">
             <div class="comment-content">
                 <div class="comment-left">
-                    <div class="upvote-downvote-area">
-                        <font-awesome-icon :icon="['fas', 'arrow-up']" class="vote-up" />
-                        <span class="comment-score">{{ comment.score }}</span>
-                        <font-awesome-icon :icon="['fas', 'arrow-down']" class="vote-down "/>
-                    </div>
+                    <VoteContainer :score="comment.score" spacing="small" />
+                    <div class="vertical-line"></div>
                 </div>
                 <div class="comment-right">
                     <div class="comment-metadata">
@@ -33,12 +31,18 @@ const props = defineProps({
                         <div class="comment-date">{{ DateTime.fromISO(comment.createdAt).toRelative() }}</div>
                     </div>
                     <div class="comment-body">{{ comment.body }}</div>
-                </div>
-            </div>
+                    <div class="comment-actions">
+                        <div class="action reply">
+                            <font-awesome-icon class="icon" :icon="['fas', 'message']" />
+                            <span class="text">Reply</span>
+                        </div>
+                    </div>
 
-            <div class="comment-children" v-if="comment.replies != null">
-                <div class="comment-children-divider" v-for="(n, i) in depth"></div>
-                <Comments :comments="comment.replies" :depth="comment.depth" />
+                    <div class="comment-children" v-if="comment.replies != null">
+                        <div class="comment-children-divider" v-for="(n, i) in depth"></div>
+                        <Comments :comments="comment.replies" :depth="comment.depth" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -48,25 +52,39 @@ const props = defineProps({
 .comments {
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
     .comment {
         margin-bottom: 1rem;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        background-color: var(--color-post-background);
+        border-radius: var(--generic-border-radius);
+        padding: var(--generic-padding);
+
         .comment-content {
             display: flex;
             flex-direction: row;
-            align-items: flex-start;
+            column-gap: var(--generic-column-gap);
             .comment-left {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
                 width: 1rem;
-                margin-right: 1rem;
 
                 .upvote-downvote-area {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
                     row-gap: 2px;
+                }
+
+                .vertical-line {
+                    width: 2px;
+                    height: 100%;
+                    margin-top: 10px;
+                    background-color: var(--color-comment-vertical-line);
+                    margin-left: 0.5rem;
+                    margin-right: 0.5rem;
                 }
 
             }
@@ -88,12 +106,30 @@ const props = defineProps({
                         color: var(--color-user);
                     }
                 }
+
+                .comment-actions {
+                    display: flex;
+                    flex-direction: row;
+                    column-gap: 8px;
+                    margin-top: 8px;
+
+                    .action {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        column-gap: 4px;
+                        cursor: pointer;
+                        transition: color 0.1s ease-in-out;
+                        font-size: 0.8rem;
+                        color: var(--color-comment-actions);
+                    }
+                    
+                }
             }
         }
 
         .comment-children {
-            margin-top: 12px;
-            margin-left: 2rem;
+            margin-top: 8px;
             .comment-children-divider {
                 width: 1px;
                 margin-left: 0.5rem;

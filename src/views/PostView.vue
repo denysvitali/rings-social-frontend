@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import Comments from '@/components/Comments.vue';
-import type { Post, Comment } from '@/models/models';
-import router from '@/router';
+import type { Post, Comment, SimplePost } from '@/models/models';
 import { DateTime } from 'luxon';
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter, type RouteLocationNormalized } from 'vue-router';
-
+import SimplePostVue from '@/components/SimplePost.vue';
 
 
 const post = ref<Post | null>(null);
@@ -41,32 +40,94 @@ loadPost(useRouter().currentRoute.value);
 let c = computed(() => {
     return {
         postedOn: post.value ? DateTime.fromISO(post.value.createdAt).toRelative(): '',
-        postedOnYmd: post.value ? DateTime.fromISO(post.value.createdAt).toLocaleString(DateTime.DATETIME_MED): ''
+        postedOnYmd: post.value ? DateTime.fromISO(post.value.createdAt).toLocaleString(DateTime.DATETIME_MED): '',
+        simplePost: post.value ? {
+            id: post.value.id,
+            createdAt: post.value.createdAt,
+            ringName: post.value.ring.name,
+            ringColor: post.value.ring.primaryColor,
+            authorUsername: post.value.author.username,
+
+            title: post.value.title,
+            body: post.value.body,
+            link: post.value.link,
+            domain: post.value.domain,
+            score: post.value.score,
+            commentsCount: post.value.commentsCount,
+            ups: post.value.ups,
+            downs: post.value.downs,
+            nsfw: post.value.nsfw,
+
+        } as SimplePost: null,
     }
 });
 </script>
   
 
 <template>
-    <div v-if="post != null">
-        <h2>{{ post.title }}</h2>
-        <!-- A nice post metadata area -->
-        <div class="post-metadata">
-            <div class="post-author">/u/{{ post.author.username }}</div>
-            <div class="post-divider">•</div>
-            <div class="post-date">{{ c.postedOn }}</div>
-        </div>
-        <!-- The post body -->
-        <div class="post-body">{{ post.body }}</div>
+    <div class="post">
+        <SimplePostVue 
+            :post="c.simplePost" 
+            :singlePostView="true"
+            :multiring="false" v-if="c.simplePost != null" />
+
         <!-- The post's comments -->
         <h3>Comments</h3>
-        <div class="post-comments">
+        <div class="post-comments" v-if="comments.length > 0">
             <Comments :comments="comments" />
         </div>
+
+        <!-- Comment composer -->
+
+        <div class="post-comment-composer">
+            <textarea 
+                class="post-comment-textarea" 
+                placeholder="What's on your mind?"
+                rows="4"
+            ></textarea>
+            <button class="post-comment-button">Comment</button>
+        </div> 
     </div>
 </template>
   
 <style scoped lang="scss">
+
+h3 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.post-comment-composer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 1rem;
+    row-gap: 8px;
+    width: 100%;
+
+    .post-comment-textarea {
+        flex-grow: 1;
+        border: 1px solid var(--color-border);
+        border-radius: var(--generic-border-radius);
+        padding: 8px;
+        resize: none;
+        align-self: stretch;
+        /* Automatic resize: */
+        font-size: 0.9em;
+    }
+
+    .post-comment-button {
+        background-color: var(--color-button-background);
+        color: var(--color-button-text);
+        border: none;
+        border-radius: var(--generic-border-radius);
+        padding: 8px 16px;
+        font-size: 0.9em;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
 .post-metadata {
     display: flex;
     font-size: 0.8em;
@@ -86,9 +147,5 @@ let c = computed(() => {
 
 .post-body {
     margin-bottom: 2rem;
-}
-
-.post-comments {
-    margin-top: 24px;
 }
 </style>

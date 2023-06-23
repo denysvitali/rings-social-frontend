@@ -3,5 +3,103 @@
 
 <template>
   <main>
+    <div class="main-title">
+      <img src="/logo.svg" class="logo"/>
+      <h1>rings.social</h1>
+    </div>
+    <p>
+      <i>Rings</i> is a welcoming social news aggregation website that focuses
+      on building communities (divided into "rings") and creating
+      meaningful discussions.
+      <br/>
+
+    </p>
+    <div class="cta-buttons">
+      <RouterLink to="/r/popular">
+        <button class="primary-button">Explore</button>
+      </RouterLink>
+
+      <a href="https://github.com/denysvitali/rings-social-frontend">
+      <button class="secondary-button">Contribute</button>
+     </a>
+    </div>
+
+    <div class="details">
+      We're still building the product and the content is read only for now,
+      but you can still explore the website and contribute to the project!
+    </div>
   </main>
 </template>
+
+<!-- CSS for an amazing landing page -->
+<style scoped lang="scss">
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 80vh;
+  padding: 20px;
+
+  .main-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    img.logo {
+      height: 100px;
+      width: 100px;
+    }
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+    max-width: 800px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .primary-button,
+  .secondary-button {
+    height: 50px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .primary-button {
+    background-color: #4c6ef5;
+    color: #fff;
+  }
+
+  .secondary-button {
+    background-color: transparent;
+    border: 2px solid #4c6ef5;
+    color: #4c6ef5;
+  }
+
+  .primary-button:hover,
+  .secondary-button:hover {
+    background-color: #3c57cb;
+    color: #fff;
+  }
+}
+</style>

@@ -99,8 +99,8 @@ div.view {
 
 @media (screen and max-width: 400px){
   .search-bar {
-    width: 40%;
     max-width: 150px;
+    justify-self: stretch;
   }
 }
 </style>

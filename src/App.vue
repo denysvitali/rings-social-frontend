@@ -16,8 +16,8 @@ import SearchBar from '@/components/SearchBar.vue';
       <!-- User Profile Info -->
       <div class="profile">
         <!-- Get username from state: -->
-        <span>john_doe</span>
-        <img src="https://picsum.photos/32" alt="Profile Picture">
+        <span class="username">john_doe</span>
+        <img src="https://picsum.photos/32" alt="Profile Picture" class="profile-picture">
       </div>
     </div>
   </header>
@@ -40,11 +40,15 @@ header {
     justify-content: space-between;
     align-items: center;
     height: 100%;
-    padding: 20px;
+    padding: 20px;      
+    column-gap: 24px;
   }
 
   .logo {
+    display: block;
     height: 100%;
+    width: 40px;
+    height: 40px;
     img {
       height: 100%;
     }
@@ -67,6 +71,7 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
+    column-gap: 12px;
 
     img {
       border-radius: 50%;
@@ -74,7 +79,6 @@ header {
     }
 
     span {
-      margin-right: 10px;
     }
 
     &:hover {
@@ -97,10 +101,30 @@ div.view {
   max-width: 1200px;
 }
 
-@media (screen and max-width: 400px){
-  .search-bar {
-    max-width: 150px;
-    justify-self: stretch;
+@media screen and (max-width: 400px){
+  header {
+    $imageSize: 32px;
+    .logo {
+      width: $imageSize;
+      height: $imageSize;
+      img {
+        width: $imageSize;
+        height: $imageSize;
+      }
+    }
+    .search-bar {
+      justify-self: stretch;
+    }
+
+    .profile {
+      img {
+        width: $imageSize;
+        height: $imageSize;
+      }
+      .username {
+        display: none;
+      }
+    }
   }
 }
 </style>

@@ -64,10 +64,12 @@ let c = computed(() => {
                     <span class="post-divider">•</span>
                 </div>
                 <div class="ring element-divider" v-if="props.singlePostView">
-                    <span class="post-ring" :style="{
-                        backgroundColor: post.ringColor,
-                        color: c.ringTextColor,
-                    }">/r/{{ post.ringName }}</span>
+                    <RouterLink :to="`/r/${post.ringName}`" class="post-ring" :style="{
+                            backgroundColor: post.ringColor,
+                            color: c.ringTextColor,
+                        }">
+                        <span >/r/{{ post.ringName }}</span>
+                    </RouterLink>
                     <span class="post-divider">•</span>
                 </div>
                 <div class="author element-divider">

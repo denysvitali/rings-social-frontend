@@ -1,23 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import SearchBar from '@/components/SearchBar.vue';
 </script>
 
 <template>
   <!-- A social network header -->
   <header>
     <div class="wrapper">
-      <img class="logo" src="/logo.svg" alt="Rings Social" @click="$router.push('/')">
-      <nav class="navbar">
-        <RouterLink to="/" aria-label="Home">Home</RouterLink>
-        <RouterLink to="/r/popular">Popular</RouterLink>
-        <RouterLink to="/r/news">News</RouterLink>
-      </nav>
+      <RouterLink to="/" class="logo">
+        <img src="/logo.svg" alt="Rings Social"/>
+      </RouterLink>
 
-      <div class="search-bar">
-        <input type="text" placeholder="Search">
-        <!-- Search Icon -->
-        <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
-      </div>
+      <SearchBar class="search-bar"/>
 
       <!-- User Profile Info -->
       <div class="profile">
@@ -35,8 +29,10 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped lang="scss">
 header {
+  background-color: var(--color-header-background);
   height: 80px;
-  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
 
   .wrapper {
     display: flex;
@@ -49,6 +45,9 @@ header {
 
   .logo {
     height: 100%;
+    img {
+      height: 100%;
+    }
     cursor: pointer;
   }
 
@@ -60,16 +59,8 @@ header {
   }
 
   .search-bar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-
-    input {
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
+    width: 80%;
+    max-width: 600px;
   }
 
   .profile {

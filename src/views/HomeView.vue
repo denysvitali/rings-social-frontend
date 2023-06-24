@@ -9,8 +9,7 @@
     </div>
     <p>
       <i>Rings</i> is a welcoming social news aggregation website that focuses
-      on building communities (divided into "rings") and creating
-      meaningful discussions.
+      on building communities ("rings") and creating meaningful discussions.
       <br/>
 
     </p>
@@ -70,6 +69,8 @@ main {
   .cta-buttons {
     display: flex;
     gap: 10px;
+    margin-top: 2em;
+    margin-bottom: 2em;
   }
 
   .primary-button,

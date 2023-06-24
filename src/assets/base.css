@@ -57,6 +57,9 @@
   --color-button-background: #1565C0;
   --color-button-text: #FFF;
 
+  /* Header */
+  --color-header-background: var(--vt-c-white);
+
   /* Post */
   --color-post-background: var(--vt-c-white);
   --color-post-vote-up: #0e9e62;

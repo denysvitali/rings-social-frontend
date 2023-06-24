@@ -28,7 +28,7 @@ function visit(name: string) {
 function hideResults() {
     setTimeout(() => {
         showResults.value = false;
-    }, 100);
+    }, 500);
 }
 
 const results = ref<Array<Result>>([]);

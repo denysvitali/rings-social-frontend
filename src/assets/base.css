@@ -59,6 +59,9 @@
 
   /* Header */
   --color-header-background: var(--vt-c-white);
+  --color-search-icon: #ccc;
+  --color-search-results-border: #ccc;
+  --color-search-results-background: #FFF;
 
   /* Post */
   --color-post-background: var(--vt-c-white);
@@ -83,6 +86,12 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
     --color-dimmed: #575757;
+
+    /* Header */
+    --color-header-background: var(--vt-c-black-soft);
+    --color-search-icon: #333;
+    --color-search-results-border: var(--vt-c-divider-dark-1);
+    --color-search-results-background: var(--vt-c-black-soft);
 
     /* Post */
     --color-post-background: var(--vt-c-black-soft);

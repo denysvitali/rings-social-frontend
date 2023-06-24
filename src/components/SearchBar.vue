@@ -20,7 +20,8 @@ let c = computed(() => {
 }});
 
 function visit(name: string) {
-    router.push(`/r/${name}`)
+    router.push(`/r/${name}`);
+    query.value = '';
     showResults.value = false;
 }
 
@@ -55,6 +56,7 @@ const showResults = ref<boolean>(false);
             <div 
                 class="search-result" 
                 v-for="result in c.results" 
+                v-bind:id="result.name"
                 @click="visit(result.name)"
             >
                 <div class="search-result-title">r/{{ result.name }}</div>
@@ -83,6 +85,7 @@ const showResults = ref<boolean>(false);
     }
 
     .icon {
+        color: var(--color-search-icon);
         position: absolute;
         left: 10px;
         z-index: 301;
@@ -91,13 +94,13 @@ const showResults = ref<boolean>(false);
     .search-results {
         position: absolute;
         cursor: pointer;
-        border: 1px solid #ccc;
+        border: 1px solid var(--color-search-results-border);
         top: 100%;
         z-index: 300;
         margin-top: -2px;
         left: 0;
         width: 100%;
-        background-color: #fff;
+        background-color: var(--color-search-results-background);
         border-radius: 0px 0px 10px 10px;
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
         padding: 10px;
@@ -126,7 +129,7 @@ const showResults = ref<boolean>(false);
 
             .search-result-subtitle {
                 font-size: 0.9rem;
-                color: #888;
+                color: var(--color-search-results-subtitle);
             }
         }
     }

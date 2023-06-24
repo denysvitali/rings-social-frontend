@@ -96,4 +96,11 @@ div.view {
   height: 100%;
   max-width: 1200px;
 }
+
+@media (screen and max-width: 400px){
+  .search-bar {
+    width: 40%;
+    max-width: 150px;
+  }
+}
 </style>

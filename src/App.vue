@@ -78,9 +78,6 @@ header {
       
     }
 
-    span {
-    }
-
     &:hover {
       cursor: pointer;
     }

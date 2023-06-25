@@ -9,6 +9,7 @@ import SimplePostVue from '@/components/SimplePost.vue';
 
 const post = ref<Post | null>(null);
 const comments = ref<Comment[]>([]);
+const numberOfComments = ref<number>(0);
 
 onBeforeRouteUpdate(async (to, from, next) => {
     loadPost(to);
@@ -24,12 +25,16 @@ async function loadPost(to: RouteLocationNormalized){
     let postId = to.params.postId as string;
     try {
         const postResponse = await fetch(`${window._settings.baseUrl}/posts/${postId}`);
-        const postData = await postResponse.json();
+        const postData: Post = await postResponse.json();
         post.value = postData;
 
         const commentsResponse = await fetch(`${window._settings.baseUrl}/posts/${postId}/comments`);
         const commentsData = await commentsResponse.json();
         comments.value = commentsData;
+
+        numberOfComments.value = postData.commentsCount;
+
+        
     } catch (e) {
         console.error(e);
     }
@@ -47,7 +52,7 @@ let c = computed(() => {
             ringName: post.value.ring.name,
             ringColor: post.value.ring.primaryColor,
             authorUsername: post.value.author.username,
-
+            author: post.value.author,
             title: post.value.title,
             body: post.value.body,
             link: post.value.link,
@@ -72,7 +77,7 @@ let c = computed(() => {
             :multiring="false" v-if="c.simplePost != null" />
 
         <!-- The post's comments -->
-        <h3>Comments</h3>
+        <h3>Comments ({{ numberOfComments }})</h3>
         <div class="post-comments" v-if="comments.length > 0">
             <Comments :comments="comments" />
         </div>
@@ -114,6 +119,12 @@ h3 {
         align-self: stretch;
         /* Automatic resize: */
         font-size: 0.9em;
+        padding: 20px;
+        outline: none;
+
+        &:active {
+            border: 2px solid var(--color-border-hover);
+        }
     }
 
     .post-comment-button {

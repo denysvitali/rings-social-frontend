@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import SearchBar from '@/components/SearchBar.vue';
+import ProfilePicture from './components/ProfilePicture.vue';
+
+const username = "john_doe";
 </script>
 
 <template>
@@ -16,8 +19,11 @@ import SearchBar from '@/components/SearchBar.vue';
       <!-- User Profile Info -->
       <div class="profile">
         <!-- Get username from state: -->
-        <span class="username">john_doe</span>
-        <img src="https://picsum.photos/32" alt="Profile Picture" class="profile-picture">
+        <span class="username">{{ username }}</span>
+        <ProfilePicture 
+          :username="username"
+          class="profile-picture"
+        />
       </div>
     </div>
   </header>
@@ -73,9 +79,14 @@ header {
     align-items: center;
     column-gap: 12px;
 
-    img {
-      border-radius: 50%;
-      
+    .profile-picture {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
 
     &:hover {

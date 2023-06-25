@@ -4,6 +4,8 @@ import type { SimplePost } from '@/models/models';
 import { DateTime } from 'luxon';
 import type { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VoteContainer from './VoteContainer.vue';
+import UserLink from './UserLink.vue';
+import ProfilePicture from './ProfilePicture.vue';
 
 let props = defineProps({
     post: {
@@ -46,7 +48,9 @@ let c = computed(() => {
 
         <div class="post-right">
             <div v-if="post.link != null" class="post-title-container">
-                <a :href="post.link" class="post-link" target="_blank">
+                <a 
+                    :href="post.link" class="post-link" target="_blank"
+                >
                     <span class="post-title">{{ post.title }}</span>
                 </a>
             </div>
@@ -55,7 +59,7 @@ let c = computed(() => {
                     :to="`/r/${post.ringName}/${post.id}`" 
                     class="post-title"
                 >
-                <div class="post-title">{{ post.title }}</div>
+                <span class="post-title">{{ post.title }}</span>
                 </RouterLink>
             </div>
             <div class="post-metadata">
@@ -73,7 +77,16 @@ let c = computed(() => {
                     <span class="post-divider">•</span>
                 </div>
                 <div class="author element-divider">
-                    <span class="post-author">/u/{{ post.authorUsername }}</span>
+                    <div class="author-content">
+                        <ProfilePicture
+                            :username="post.authorUsername"
+                            class="post-author-profile-picture"
+                        />
+                        <UserLink 
+                            :username="post.authorUsername" 
+                            :admin="post.author.admin"
+                            class="post-author-username"/>
+                    </div>
                     <span class="post-divider">•</span>
                 </div>
                 <div class="date element-divider">
@@ -106,6 +119,8 @@ let c = computed(() => {
 </template>
 
 <style scoped lang="scss">
+$authorLineHeight: 24px;
+
 .post {
     display: flex;
     flex-direction: row;
@@ -113,6 +128,7 @@ let c = computed(() => {
     column-gap: var(--generic-column-gap);
     
     background-color: var(--color-post-background);
+    border: var(--generic-border);
     padding: var(--generic-padding);
     border-radius: var(--generic-border-radius);
     overflow: hidden;
@@ -154,15 +170,6 @@ let c = computed(() => {
         margin-top: 10px;
     }
 
-    a {
-        text-decoration: none;
-        color: #0D47A1;
-
-        &:visited {
-            color: #651FFF;
-        }
-    }
-
 
     .post-right {
         display: flex;
@@ -172,8 +179,25 @@ let c = computed(() => {
         .post-title-container {
             font-size: 20px;
             line-height: 20px;
-            font-weight: bold;
             margin-bottom: 8px;
+            
+            span {
+                font-weight: bold;
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--color-post-type-text-title);
+            }
+
+            a.post-link {
+                text-decoration: none;
+                color: var(--color-post-title-link);
+
+                &:visited {
+                    color: var(--color-post-title-link-visited);
+                }
+            }
         }
 
         .post-actions {
@@ -188,6 +212,7 @@ let c = computed(() => {
                 border-radius: 5px;
                 font-size: 1em;
                 user-select: none;
+                text-decoration: none;
             }
 
             .action-comment {
@@ -227,19 +252,35 @@ let c = computed(() => {
         .element-divider {
             display: flex;
             column-gap: 10px;
+
+            .post-divider {
+                align-self: center;
+            }
         }
 
-        .post-author {
-            color: var(--color-user);
-            font-weight: bold;
+        .author-content {
+            display: flex;
+            column-gap: 6px;
+            flex-direction: row;
+            align-items: center;
+            height: $authorLineHeight;
+
+            .post-author-profile-picture {
+                width: $authorLineHeight;
+                height: $authorLineHeight;
+            }
         }
 
         .post-ring {
             color: #fff;
+            text-decoration: none;
             user-select: none;
             border-radius: 6px;
             padding: 0px 6px;
-            font-weight: bold;
+
+            span {
+                font-weight: bold;
+            }
         }
 
         .post-date {

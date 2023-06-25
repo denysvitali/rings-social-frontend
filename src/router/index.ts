@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/r/:ringName/:postId',
       name: 'view-post',
       component: () => import('../views/PostView.vue')
+    },
+    {
+      path: '/u/:username',
+      name: 'view-user',
+      component: () => import('../views/UserView.vue'),
     }
   ]
 })

@@ -13,6 +13,30 @@ export type Author = {
     username: string;
     displayName: string;
     createdAt: string;
+    admin: boolean;
+};
+
+export type Badge = {
+    id: string;
+    backgroundColor: string;
+    textColor: string;
+}
+
+export type User = {
+    username: string;
+    displayName: string;
+    profilePicture: string;
+    socialLinks: SocialLink[];
+    createdAt: string;
+
+    badges: Badge[];
+    admin: boolean;
+};
+
+export type SocialLink = {
+    username: string;
+    platform: string;
+    url: string;
 };
 
 export type SimplePost = {
@@ -21,6 +45,7 @@ export type SimplePost = {
     ringName: string;
     ringColor: string;
     authorUsername: string;
+    author: Author;
     title: string;
     body?: string;
     link: string;

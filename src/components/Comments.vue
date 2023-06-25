@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Comment } from '@/models/models';
-import { type PropType } from 'vue';
+import { computed, type PropType } from 'vue';
 import { DateTime } from 'luxon';
 import VoteContainer from './VoteContainer.vue';
+import UserLink from './UserLink.vue';
+import { marked } from 'marked';
+import createDOMPrufiy from 'dompurify';
 
 const props = defineProps({
     comments: {
@@ -14,11 +17,27 @@ const props = defineProps({
         default: 0,
     }
 });
+
+const dompurify = createDOMPrufiy(window);
+
+const c = computed(() => {
+    return {
+        renderedBody: (body: string) => {
+            const renderedMd = marked.parse(body);
+            const sanitized = dompurify.sanitize(renderedMd,
+                {ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'code', 'pre', 'br', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']}
+            );
+            return sanitized;
+        }
+    }
+});
 </script>
 
 <template>
     <div class="comments">
-        <div v-for="comment in comments" :key="comment.id" class="comment">
+        <div v-for="comment in comments" :key="comment.id" class="comment" :class="{
+          'comment-depth-0': comment.depth == 0,
+        }">
             <div class="comment-content">
                 <div class="comment-left">
                     <VoteContainer :score="comment.score" spacing="small" />
@@ -26,11 +45,14 @@ const props = defineProps({
                 </div>
                 <div class="comment-right">
                     <div class="comment-metadata">
-                        <div class="comment-author">/u/{{ comment.author.username }}</div>
+                        <UserLink 
+                            :username="comment.author.username"
+                            :admin="comment.author.admin"
+                            class="comment-author"/>
                         <div class="comment-divider">•</div>
                         <div class="comment-date">{{ DateTime.fromISO(comment.createdAt).toRelative() }}</div>
                     </div>
-                    <div class="comment-body">{{ comment.body }}</div>
+                    <div class="comment-body" v-html="c.renderedBody(comment.body)"></div>
                     <div class="comment-actions">
                         <div class="action reply">
                             <font-awesome-icon class="icon" :icon="['fas', 'message']" />
@@ -48,18 +70,28 @@ const props = defineProps({
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
+/* 
+    Not scoped, on purpose.
+    Since we're rendering the markdown with marked, 
+    we can't used scoped styles.
+*/
 .comments {
     display: flex;
     flex-direction: column;
     .comment {
-        margin-bottom: 1rem;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+
+        margin-bottom: 1rem;
         background-color: var(--color-post-background);
         border-radius: var(--generic-border-radius);
-        padding: var(--generic-padding);
+        padding: var(--comment-padding);
+
+        &.comment-depth-0 {
+            border: var(--generic-border);        
+        }
 
         .comment-content {
             display: flex;
@@ -94,6 +126,24 @@ const props = defineProps({
 
                 .comment-body {
                     margin-bottom: 0.5rem;
+                    pre {
+                        display: block;
+                        margin-top: 1em;
+                        margin-bottom: 1em;
+                        code {
+                            display: block;
+                            margin-top: 5px;
+                            background-color: var(--color-code-background);
+                            padding: var(--code-block-padding);
+                        }
+                    }
+
+                    p {
+                        code {
+                            background-color: var(--color-code-background);
+                            padding: var(--code-inline-padding);
+                        }
+                    }
                 }
                 .comment-metadata {
                     display: flex;
@@ -101,10 +151,6 @@ const props = defineProps({
                     font-size: 0.8rem;
                     column-gap: 10px;
                     margin-bottom: 8px;
-                    .comment-author {
-                        font-weight: bold;
-                        color: var(--color-user);
-                    }
                 }
 
                 .comment-actions {

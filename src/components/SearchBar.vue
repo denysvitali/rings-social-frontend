@@ -28,10 +28,9 @@ function visit(name: string) {
 function hideResults() {
     setTimeout(() => {
         showResults.value = false;
-    }, 500);
+    }, 100);
 }
 
-const results = ref<Array<Result>>([]);
 const query = ref<string>('');
 const showResults = ref<boolean>(false);
 </script>
@@ -94,7 +93,7 @@ const showResults = ref<boolean>(false);
     .search-results {
         position: absolute;
         cursor: pointer;
-        border: 1px solid var(--color-search-results-border);
+        border: var(--generic-border);
         top: 100%;
         z-index: 300;
         margin-top: -2px;
@@ -102,7 +101,7 @@ const showResults = ref<boolean>(false);
         width: 100%;
         background-color: var(--color-search-results-background);
         border-radius: 0px 0px 10px 10px;
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
         padding: 10px;
         z-index: 300;
 

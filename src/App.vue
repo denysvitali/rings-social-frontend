@@ -35,6 +35,10 @@ const username = "john_doe";
 
 <style scoped lang="scss">
 header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
   background-color: var(--color-header-background);
   height: 80px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);

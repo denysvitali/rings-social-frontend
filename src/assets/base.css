@@ -44,9 +44,9 @@
 
   --section-gap: 160px;
 
+  --color-link: #206faf;
+  --color-link-visited: #6a2996;
 
-  --color-post-link: var(--color-heading);
-  --color-post-link-visited: var(--color-heading-2);
 
   --color-action-comment: #1565C0;
   --color-action-comment-border: #0871eb;
@@ -72,8 +72,8 @@
   --color-post-vote-down: #e74c3c;
   --color-post-divider: #ddd;
   --color-post-type-text-title: #333;
-  --color-post-title-link: #004d8b;
-  --color-post-title-link-visited: #002e53;
+  --color-post-title-link: var(--color-link);
+  --color-post-title-link-visited: var(--color-link-visited);
 
   /* Comment */
   --color-comment-actions: #868686;
@@ -100,6 +100,9 @@
     --color-text: var(--vt-c-text-dark-2);
     --color-dimmed: #575757;
 
+    --color-link: #167ccf;
+    --color-link-visited: #744db3;
+
     /* Users */
     --color-user: #1d9e68;
     --color-admin: #c93838;
@@ -116,12 +119,13 @@
     --color-action-comment-border: #2c80e0;
     --color-post-divider: #353535;
     --color-post-type-text-title: #a1a1a1;
-    --color-post-title-link: #167ccf;
-    --color-post-title-link-visited: #744db3;
+    --color-post-title-link: var(--color-link);
+    --color-post-title-link-visited: var(--color-link-visited);
 
     /* Comment */
     --color-comment-actions: #7c7c7c;
     --color-comment-vertical-line: #414040;
+    --color-code-background: #1b1b1b;
 
   }
 }

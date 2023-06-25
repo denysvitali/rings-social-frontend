@@ -97,6 +97,7 @@ const c = computed(() => {
             display: flex;
             flex-direction: row;
             column-gap: var(--generic-column-gap);
+
             .comment-left {
                 display: flex;
                 flex-direction: column;
@@ -126,6 +127,12 @@ const c = computed(() => {
 
                 .comment-body {
                     margin-bottom: 0.5rem;
+                    a {
+                        color: var(--color-link);
+                        &:visited {
+                            color: var(--color-link-visited);
+                        }
+                    }
                     pre {
                         display: block;
                         margin-top: 1em;
